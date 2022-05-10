@@ -1,21 +1,37 @@
 import { useState, useEffect } from "react";
-function Hello() {
-  function hiFn() {
-    console.log("create:3");
-    return byeFn;
-  }
-  function byeFn() {
-    console.log("byebye:(");
-  }
-  useEffect(hiFn, []);
-}
 function App() {
-  const [showing, setShowing] = useState(false);
-  const onClick = () => setShowing((prev) => !prev);
+  const [toDo, setTodo] = useState("");
+  const [toDos, setTodos] = useState([]);
+  const onChange = (event) => setTodo(event.target.value);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
+    }
+    //함수 보내기
+    setTodos((currentArray) => [toDo, ...currentArray]);
+    //강제로 값을 넣어 줄때
+    setTodo("");
+  };
+
   return (
     <div>
-      {showing ? <Hello /> : null}
-      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+      <h1>My To Dos({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChange}
+          value={toDo}
+          type="text"
+          placeholder="Write youre to do."
+        />
+        <button>Add To Do</button>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
